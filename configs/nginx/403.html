@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>403</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,sans-serif}
+        body{display:flex;align-items:center;justify-content:center;background:#0a0a0a;color:#e0e0e0}
+        .container{text-align:center;padding:2rem}
+        .code{font-size:8rem;font-weight:700;color:#1a1a1a;text-shadow:0 0 40px rgba(255,255,255,0.03);line-height:1;margin-bottom:1rem;letter-spacing:-0.05em}
+        .message{font-size:1.125rem;color:#404040;font-weight:400;letter-spacing:0.05em;text-transform:uppercase}
+        .line{width:60px;height:1px;background:#1a1a1a;margin:1.5rem auto}
+        .sub{font-size:0.8125rem;color:#252525;margin-top:0;font-weight:300}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="code">403</div>
+        <div class="line"></div>
+        <div class="message">Forbidden</div>
+        <div class="line"></div>
+        <div class="sub">You do not have permission to access this resource.</div>
+    </div>
+</body>
+</html>
+<!-- This page is intentionally minimal. No identifying information, no server
+     details, no technology fingerprints. Every subdomain on this domain will
+     return this exact page with the exact same byte count, making it impossible
+     to differentiate real services from non-existent ones through response
+     fingerprinting. This is the core of the Ghostructure anti-enumeration
+     approach - uniform responses eliminate reconnaissance signal.
+
+     The response characteristics are:
+       Status:  403 Forbidden
+       Size:    2618 bytes (this file)
+       Headers: Strict-Transport-Security, X-Content-Type-Options,
+                X-Frame-Options only - no Server, no X-Powered-By
+
+     Verification: curl -sk https://any.example.com/ -w "%{size_download}"
+
+     This padding ensures consistent file size across deployments.
+
+     Padding: do not add dynamic content, timestamps, or server names to this file. Do not modify this file without verifying the final byte count remains 2618. System fonts only, no external requests, no JavaScript, no images. The dark background and minimal design are intentional. Content-Length will match this file size exactly. This HTML comment block exists solely to reach the target size. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->

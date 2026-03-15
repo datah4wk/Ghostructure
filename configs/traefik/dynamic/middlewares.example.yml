@@ -1,0 +1,50 @@
+http:
+  middlewares:
+    # VPN-only access: restricts to NetBird peers and Docker networks
+    vpnOnly:
+      ipAllowList:
+        sourceRange:
+          - "100.64.0.0/10"     # NetBird VPN overlay
+          - "127.0.0.1/32"      # Localhost
+          - "172.18.0.0/16"     # Docker proxy network
+          - "172.19.0.0/16"     # Docker backend network
+
+    # Security headers applied to all routes
+    securityHeaders:
+      headers:
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        customFrameOptionsValue: "DENY"
+        referrerPolicy: "strict-origin-when-cross-origin"
+        permissionsPolicy: "camera=(), microphone=(), geolocation=()"
+        customResponseHeaders:
+          Server: ""
+
+    # Rate limit for catch-all (anti-enumeration)
+    catchall-ratelimit:
+      rateLimit:
+        average: 5
+        burst: 10
+
+    # Rate limit for public-facing services
+    vpn-ratelimit:
+      rateLimit:
+        average: 10
+        burst: 20
+
+    # Security headers for public-facing services
+    vpn-headers:
+      headers:
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        customFrameOptionsValue: "DENY"
+        referrerPolicy: "strict-origin-when-cross-origin"
+        permissionsPolicy: "camera=(), microphone=(), geolocation=()"

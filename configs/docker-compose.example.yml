@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:v3.6
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.example.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
+      - ./certs:/certs
+      - /var/log/traefik:/var/log/traefik
+    environment:
+      - DNS_PROVIDER_API_KEY=${DNS_PROVIDER_API_KEY}
+      - DNS_PROVIDER_API_SECRET=${DNS_PROVIDER_API_SECRET}
+    networks:
+      - proxy
+
+  nginx-403:
+    image: nginx:alpine
+    container_name: nginx-403
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.example.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/403.html:/usr/share/nginx/html/403.html:ro
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.catch-all.rule=HostRegexp(`.+`)"
+      - "traefik.http.routers.catch-all.priority=1"
+      - "traefik.http.routers.catch-all.entrypoints=websecure"
+      - "traefik.http.routers.catch-all.middlewares=securityHeaders@file,catchall-ratelimit@file"
+      - "traefik.http.routers.catch-all.tls=true"
+      - "traefik.http.routers.catch-all.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.catch-all.tls.domains[0].main=example.com"
+      - "traefik.http.routers.catch-all.tls.domains[0].sans=*.example.com"
+      - "traefik.http.services.nginx-403.loadbalancer.server.port=80"
+
+  # Example protected service (only accessible via VPN)
+  # app:
+  #   image: your-app:latest
+  #   networks:
+  #     - proxy
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.app.rule=Host(`app.example.com`)"
+  #     - "traefik.http.routers.app.entrypoints=websecure"
+  #     - "traefik.http.routers.app.middlewares=vpnOnly@file"
+  #     - "traefik.http.routers.app.tls=true"
+
+networks:
+  proxy:
+    external: true

@@ -1,0 +1,10 @@
+http:
+  # Error-pages middleware: intercepts 403 responses from ipAllowList
+  # and serves the same nginx 403 page as the catch-all router
+  middlewares:
+    error-pages:
+      errors:
+        status:
+          - "403"
+        service: nginx-403@docker
+        query: /
